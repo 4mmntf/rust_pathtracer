@@ -64,7 +64,7 @@ fn main() {
     let aspect_ratio = 16.0 / 9.0;
     let width = 800;
     let height = (width as f32 / aspect_ratio) as u32;
-    let samples_per_pixel = 50000;
+    let samples_per_pixel = 1000;
     let max_depth = 50;
 
     let mut img = RgbImage::new(width, height);
