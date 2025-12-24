@@ -13,7 +13,7 @@ use rayon::prelude::*;
 use ray::Ray;
 use hittable::{HitRecord, Hittable};
 use sphere::Sphere;
-use material::{Material, Lambertian, Metal, DiffuseLight};
+use material::{Lambertian, Metal, DiffuseLight};
 use camera::Camera;
 
 
@@ -43,15 +43,14 @@ fn ray_color(r: &Ray, world: &dyn Hittable, depth: i32) -> Vec3 {
     if depth <= 0 { return Vec3::ZERO; }
 
     if let Some(rec) = world.hit(r, 0.001, f32::INFINITY) {
-        // 1. まず、その物体が発光しているか確認
+
         let emitted = rec.mat.emitted();
 
-        // 2. 散乱（反射）するか確認
         if let Some((attenuation, scattered)) = rec.mat.scatter(r, &rec) {
-            // 発光 + (反射率 * 反射先の光)
+
             return emitted + attenuation * ray_color(&scattered, world, depth - 1);
         } else {
-            // 散乱しない場合（光源など）は、その物体の発光色だけを返す
+
             return emitted;
         }
     }
@@ -107,13 +106,11 @@ fn main() {
         .par_bridge() 
         .for_each(|(x, y, pixel)| {
             
-            // ★3. 乱数生成器(rng)をループの内側で作る
-            // これを外で作って共有しようとするとエラーになります（スレッドセーフではないため）
             let mut rng = rand::thread_rng();
 
             let mut pixel_color = Vec3::ZERO;
             for _ in 0..samples_per_pixel {
-                // r#gen メソッドの呼び出しなどは以前の修正のままでOK
+
                 let u_offset: f32 = rng.r#gen();
                 let v_offset: f32 = rng.r#gen();
                 
@@ -134,8 +131,8 @@ fn main() {
                 (g * 256.0 - 0.001).max(0.0) as u8,
                 (b * 256.0 - 0.001).max(0.0) as u8,
             ]);
-        }); // ここにセミコロンを忘れないように注意
+        });
 
-    img.save("output_parallel.png").unwrap();
-    println!("完了: output_parallel.png を保存しました。");
+    img.save("output.png").unwrap();
+    println!("saveed output.png");
 }

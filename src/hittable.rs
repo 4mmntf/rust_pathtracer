@@ -28,7 +28,6 @@ pub trait Hittable: Sync + Send {
 }
 
 pub struct HittableList {
-    // ★修正: Boxの中身に + Send + Sync を追加
     pub objects: Vec<Box<dyn Hittable + Send + Sync>>, 
 }
 
@@ -42,7 +41,6 @@ impl HittableList {
     }
 }
 
-// ここは変更なし
 impl Hittable for HittableList {
     fn hit(&self, r: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let mut hit_anything: Option<HitRecord> = None;
