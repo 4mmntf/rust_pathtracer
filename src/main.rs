@@ -105,7 +105,7 @@ fn main() {
         dist_to_focus
     );
 
-    println!("レンダリング開始...");
+    println!("start rendering...");
     img.enumerate_pixels_mut()
         .par_bridge() 
         .for_each(|(x, y, pixel)| {
@@ -140,5 +140,5 @@ fn main() {
     img.save("output.png").unwrap();
     println!("saved output.png");
     let end = start.elapsed();
-    println!("spent {}.{:03}", end.as_secs(), end.subsec_nanos() / 1_000_000);
+    println!("spent {}.{:03}s", end.as_secs(), end.subsec_nanos() / 1_000_000);
 }
