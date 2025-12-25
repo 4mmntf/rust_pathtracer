@@ -9,6 +9,8 @@ use glam::Vec3;
 use image::{Rgb, RgbImage};
 use rand::Rng;
 use rayon::prelude::*;
+use rand::rngs::SmallRng;
+use rand::SeedableRng;
 
 use ray::Ray;
 use hittable::{HitRecord, Hittable};
@@ -61,7 +63,7 @@ fn ray_color(r: &Ray, world: &dyn Hittable, depth: i32) -> Vec3 {
 fn main() {
     // 画像設定
     let aspect_ratio = 16.0 / 9.0;
-    let width = 800;
+    let width = 1920;
     let height = (width as f32 / aspect_ratio) as u32;
     let samples_per_pixel = 1000;
     let max_depth = 50;
@@ -106,7 +108,7 @@ fn main() {
         .par_bridge() 
         .for_each(|(x, y, pixel)| {
             
-            let mut rng = rand::thread_rng();
+            let mut rng = SmallRng::from_entropy();
 
             let mut pixel_color = Vec3::ZERO;
             for _ in 0..samples_per_pixel {
