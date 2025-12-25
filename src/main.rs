@@ -138,7 +138,7 @@ fn main() {
         });
 
     img.save("output.png").unwrap();
-    println!("saveed output.png");
+    println!("saved output.png");
     let end = start.elapsed();
     println!("spent {}.{:03}", end.as_secs(), end.subsec_nanos() / 1_000_000);
 }
