@@ -11,13 +11,13 @@ use rand::Rng;
 use rayon::prelude::*;
 use rand::rngs::SmallRng;
 use rand::SeedableRng;
+use std::time::Instant;
 
 use ray::Ray;
 use hittable::{HitRecord, Hittable};
 use sphere::Sphere;
 use material::{Lambertian, Metal, DiffuseLight};
 use camera::Camera;
-
 
 struct HittableList {
     objects: Vec<Box<dyn Hittable>>,
@@ -61,12 +61,14 @@ fn ray_color(r: &Ray, world: &dyn Hittable, depth: i32) -> Vec3 {
 }
 
 fn main() {
+    let start = Instant::now();
     // 画像設定
     let aspect_ratio = 16.0 / 9.0;
     let width = 1920;
     let height = (width as f32 / aspect_ratio) as u32;
     let samples_per_pixel = 1000;
     let max_depth = 50;
+    
 
     let mut img = RgbImage::new(width, height);
 
@@ -137,4 +139,6 @@ fn main() {
 
     img.save("output.png").unwrap();
     println!("saveed output.png");
+    let end = start.elapsed();
+    println!("spent {}.{:03}", end.as_secs(), end.subsec_nanos() / 1_000_000);
 }
